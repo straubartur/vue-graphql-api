@@ -5,6 +5,7 @@ export default gql`
      allList{
           id
           title
+          owner
      }
 }
 `;

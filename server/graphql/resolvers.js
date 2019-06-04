@@ -1,4 +1,4 @@
-const list = [
+let list = [
     {
         id: "1",
         title: "Teste teste dassadasd",
@@ -33,13 +33,20 @@ module.exports = {
     Mutation: {
         createList(root, args, context) {
             const newPost = {
-                id: String(Math.random()*1000),
+                id: String(Math.round(Math.random()*1000000)),
                 title: args.title,
                 owner: args.owner
             }
             console.log(newPost)
             list.push(newPost)
             return newPost
-        }
+        },
+        removeElementFromList(root, args, context) {
+            const newList = list.filter(list => list.id !== args.id)
+            list = newList
+            return {
+                id: args.id
+            }
+        },
     }
 }
