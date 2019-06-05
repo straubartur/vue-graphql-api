@@ -8,12 +8,12 @@
       <input v-model="owner" id="title">
       <button @click="createList">Create Element</button>      
       <app-list
-        v-for="list in allList"
+        v-for="post in allPosts"
         @myEvent="removeElement($event)"
-        :title="list.title"
-        :owner="list.owner"
-        :id="list.id"
-        :key="list.id"
+        :title="post.title"
+        :owner="post.owner"
+        :id="post.id"
+        :key="post.id"
       >
       </app-list>
     </div>
@@ -33,7 +33,7 @@ export default {
       loading: "",
       title: "",
       owner: "",
-      allList: [],
+      allPosts: [],
     };
   },
   methods: {
@@ -52,16 +52,16 @@ export default {
           const { id } = removeElementFromList
           const data = store.readQuery({ query: ALL_POST_QUERY })
           
-          const newCache = data.allList.filter(list => list.id !== id)
-          data.allList = newCache
+          const newCache = data.allPosts.filter(list => list.id !== id)
+          data.allPosts = newCache
           store.writeQuery({ query: ALL_POST_QUERY, data })
         },
         }).catch(error => console.log("error", error))
     },
     createList() {
       this.$apollo.mutate({
-        mutation: gql`mutation ($title: String!, $owner: String!) {
-          createList(title: $title, owner: $owner ) {
+        mutation: gql`mutation ($title: String!) {
+          createPost(title: $title) {
             id
             title
             owner
@@ -69,20 +69,19 @@ export default {
         }`,
         variables: {
           title: this.title,
-          owner: this.owner
         },
         update: (store, { data: createList2 }) => {
           // Read the data from our cache for this ALL_POST_QUERY.
           const data = store.readQuery({ query: ALL_POST_QUERY })
-          const { createList } = createList2
-          data.allList.push(createList)
+          const { createPost } = createList2
+          data.allPosts.push(createPost)
           store.writeQuery({ query: ALL_POST_QUERY, data })
         },
         })
     }
   },
   apollo: {
-    allList: {
+    allPosts: {
       query: ALL_POST_QUERY
     }
   }
