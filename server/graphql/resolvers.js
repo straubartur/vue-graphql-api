@@ -1,49 +1,67 @@
-let list = [
+let posts = [
     {
         id: "1",
         title: "Teste teste dassadasd",
-        owner: "John Doe"
+        owner: "John Doe",
+        user:{
+            id: "1"
+        },
     },
     {
         id: "2",
         title: "Mano do ceu, graphql é massa",
-        owner: "John Fernando"
+        owner: "John Fernando",
+        user:{
+            id: "2"
+        },
     },
     {
         id: "3",
         title: "react>vue",
-        owner: "John Doe"
+        owner: "John Doe",
+        user:{
+            id: "3"
+        },
     },
 ]
 
 module.exports = {
-    Query: {
-        allList(root, args, context) {
-            return list
+    User: {
+        id: (root, args, { req, res}) => {
+            return root.id
         },
-        listById(root, args, context) {
-            const listItem = list.find(item => {
-                if(item.id === args.id) {
-                    return item
+        firstName: () => "Artur"
+    },
+    Query: {
+        allPosts(root, args, context) {
+            
+            return posts
+        },
+        Post(root, args, context) {
+
+            const post = posts.find(post => {
+                if(post.id === args.id) {
+                    return post
                 }
-                throw new Error('item not found')
             })
+            return post
         }
     },
     Mutation: {
-        createList(root, args, context) {
+        createPost(root, args, context) {
             const newPost = {
                 id: String(Math.round(Math.random()*1000000)),
                 title: args.title,
-                owner: args.owner
+                user: {
+                    id: args.userId
+                }
             }
-            console.log(newPost)
-            list.push(newPost)
+            posts.push(newPost)
             return newPost
         },
         removeElementFromList(root, args, context) {
-            const newList = list.filter(list => list.id !== args.id)
-            list = newList
+            const newList = posts.filter(post => post.id !== args.id)
+            posts = newList
             return {
                 id: args.id
             }
