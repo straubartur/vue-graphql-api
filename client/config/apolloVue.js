@@ -14,7 +14,6 @@ const apolloProvider = new VueApollo({
       fetchPolicy: 'cache-and-network',
     },
   },
-  // Global error handler for all smart queries and subscriptions
   errorHandler(error) {
     console.log('Global error handler')
     console.error(error)

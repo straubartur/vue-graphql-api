@@ -9,9 +9,10 @@ module.exports = gql`
     type User {
         id: String!
         name: String!
-        firstName: String!
+        lastName: String!
+        age: Int!
+        firstName: String
     }
-
     type Post {
         id: String!
         title: String
@@ -19,7 +20,7 @@ module.exports = gql`
         user: User
     }
     type Mutation {
-        createPost(title: String!, userId: String): Post!
+        createPost(title: String!, userId: String, owner: String!): Post!
         removeElementFromList(id: String!): Post!
     }
 
